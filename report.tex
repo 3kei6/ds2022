@@ -1,0 +1,142 @@
+\documentclass[UTF8]{ctexart}
+\documentclass[a4paper]{article}
+
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage[a4paper,left=25.4mm,right=25.4mm,top=29.8mm,bottom=29.8mm]{geometry}
+
+\lstset{numbers=left,
+	basicstyle=\ttfamily,
+	language=c++}
+
+\title{作业一: 双链表的设计和实现}
+
+\author{张竣凯 \\ 3210300361 \\ 数学与应用数学}
+
+\begin{document}
+
+\maketitle
+
+双向链表也叫双链表，是链表的一种，它的每个数据结点中都有两个指针，分别指向直接后继和直接前驱。所以，从双向链表中的任意一个结点开始，都可以很方便地访问它的前驱结点和后继结点。一般我们都构造双向循环链表。
+
+\begin{flushright}
+——摘自百度百科《双向链表》
+\end{flushright}
+
+
+
+
+\section{设计思路}
+
+\subsection{在 DoubleLinkedList.h 头文件里头编写双链表的类}
+\hphantom 空即：class DoubleLinkedList
+
+\subsection{编写该类中所需的变量、结构、子类、以及基本功能等}
+\hphantom 空例如：Node结构、Iterator类、begin函数等
+
+\subsection{编写出结构所需的变量}
+\hphantom 空例如：Node结构中包含数据以及两个指针
+
+\subsection{编写出各个子类所需的函数}
+\hphantom 空例如：Iterator类中的各种运算符重载函数等
+
+\subsection{编写出双链表类所需的函数}
+\hphantom 空例如：begin函数、end函数、size函数等
+
+\subsection{在 main.cpp 主流程里头编写外部函数find以及测试程序}
+\hphantom 空尽可能地使用引用&以减少内部复制，以及充分考虑必要的const限制以提高安全性
+
+\newpage
+
+\section{额外函数}
+
+\subsection{printList函数}
+
+\begin{lstlisting}
+void printList() 
+{
+    for (iterator itr = begin(); itr != end(); itr++)
+    {
+        std::cout << *itr << " ";
+    }
+    std::cout << '\b' << std::endl;
+}
+\end{lstlisting}
+
+\subsection{find函数}
+
+\begin{lstlisting}
+template <typename DT>
+typename DoubleLinkedList<DT>::iterator find
+        (DoubleLinkedList<DT>& _list, const DT& _val)
+{
+    typename DoubleLinkedList<DT>::iterator itr = _list.begin();
+    typename DoubleLinkedList<DT>::iterator end = _list.end();
+    int position = 1;
+    for(itr; itr != end; ++itr)
+    {
+        if(*itr == _val)
+        {
+            std::cout << "The position of value \"" << _val << "\" is " 
+                      << position << "." << std::endl;
+            return itr;
+        }
+        position++;
+    }
+    std::cout << "The given value \"" << _val 
+              << "\" is not found in the list!" << std::endl;
+    return itr;
+};
+\end{lstlisting}
+
+\newpage
+
+\subsection{main函数}
+
+\begin{lstlisting}
+int main(int argc, char* argv[])
+{
+    DoubleLinkedList<int> L;
+    L.push_back(1);
+    L.push_back(2);
+    L.push_back(3);
+    L.push_back(4);
+    L.push_back(5);
+    L.printList();
+    DoubleLinkedList<int>::iterator iter;
+    iter = find(L, 3);
+    L.erase(iter);
+    L.printList();
+    iter = find(L, 3);
+    return 0;
+}
+\end{lstlisting}
+
+\section{测试说明与结果}
+
+将main.cpp与DoubleLinkedList.h两个文件放入项目list后，进入终端，找到list的路径后，输入g++ -o test main.cpp后回车，接着输入./test后回车，将会出现以下结果：
+
+\begin{flushleft}
+1 2 3 4 5 \\
+The position of value "3" is 3. \\
+1 2 4 5 \\
+The given value "3" is not found in the list! \\
+\end{flushleft}
+
+\section{内存泄漏检查}
+
+承接上个部分，继续在终端中输入valgrind ./test后回车，将会出现以下结果
+
+\begin{flushleft}
+==2878== \\
+==2878== HEAP SUMMARY: \\
+==2878==     in use at exit: 0 bytes in 0 blocks \\
+==2878==   total heap usage: 9 allocs, 9 frees, 73,896 bytes allocated \\
+==2878== \\
+==2878== All heap blocks were freed -- no leaks are possible \\
+==2878== \\
+==2878== For lists of detected and suppressed errors, rerun with: -s \\
+==2878== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0) \\
+\end{flushleft}
+
+\end{document}
