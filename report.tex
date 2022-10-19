@@ -1,15 +1,14 @@
 \documentclass[UTF8]{ctexart}
-\documentclass[a4paper]{article}
 
-\usepackage{listings}
+\usepackage{listings,xcolor}
 \usepackage{graphicx}
 \usepackage[a4paper,left=25.4mm,right=25.4mm,top=29.8mm,bottom=29.8mm]{geometry}
 
 \lstset{numbers=left,
-	basicstyle=\ttfamily,
-	language=c++}
+    commentstyle=\color{blue!50},
+    columns=flexible}
 
-\title{作业一: 双链表的设计和实现}
+\title{作业二：BST 排序算法的实现}
 
 \author{张竣凯 \\ 3210300361 \\ 数学与应用数学}
 
@@ -17,126 +16,179 @@
 
 \maketitle
 
-双向链表也叫双链表，是链表的一种，它的每个数据结点中都有两个指针，分别指向直接后继和直接前驱。所以，从双向链表中的任意一个结点开始，都可以很方便地访问它的前驱结点和后继结点。一般我们都构造双向循环链表。
+二叉排序树（Binary Sort Tree），又称二叉查找树（Binary Search Tree），亦称二叉搜索树。是数据结构中的一类。在一般情况下，查询效率比链表结构要高。
 
 \begin{flushright}
-——摘自百度百科《双向链表》
+——摘自百度百科《二叉排序树》
 \end{flushright}
-
-
-
 
 \section{设计思路}
 
-\subsection{在 DoubleLinkedList.h 头文件里头编写双链表的类}
-\hphantom 空即：class DoubleLinkedList
+\subsection{阅读并理解课本所提供的头文件 BinarySearchTree.h 里头编写的所有代码}
+\hphantom 空例如：class BinarySearchTree 以及其功能函数等
 
-\subsection{编写该类中所需的变量、结构、子类、以及基本功能等}
-\hphantom 空例如：Node结构、Iterator类、begin函数等
+\subsection{阅读并理解课本所提供的头文件 dsexceptions.h 里头编写的所有代码}
+\hphantom 空例如：class UnderflowException、IllegalArgumentException 等
 
-\subsection{编写出结构所需的变量}
-\hphantom 空例如：Node结构中包含数据以及两个指针
+\subsection{在测试程序 main.cpp 中编写 BSTSorting函数}
+\hphantom 空用于将数组\_arr 排序
 
-\subsection{编写出各个子类所需的函数}
-\hphantom 空例如：Iterator类中的各种运算符重载函数等
+\subsection{在测试程序 main.cpp 中编写 test函数}
+\hphantom 空测试用的代码大同小异，故编写test函数以减少复制
 
-\subsection{编写出双链表类所需的函数}
-\hphantom 空例如：begin函数、end函数、size函数等
+\subsection{在测试程序 main.cpp 中编写 main函数}
+\hphantom 空调用事先写好的test函数，且可控制数组的大小
 
-\subsection{在 main.cpp 主流程里头编写外部函数find以及测试程序}
-\hphantom 空尽可能地使用引用&以减少内部复制，以及充分考虑必要的const限制以提高安全性
+\subsection{适当地添加注释，尽可能地使用引用\&以及充分考虑必要的const限制}
+\hphantom 空以便于理解代码，减少内部复制和提高安全性
+
+\subsection{分别测试\_mode = 0 的最坏效率和\_mode = 1时的平均效率}
+\hphantom 空测试完毕后将结果记录下来，并进行时间效率的分析
 
 \newpage
 
 \section{额外函数}
 
-\subsection{printList函数}
+\subsection{BSTSorting 函数}
 
-\begin{lstlisting}
-void printList() 
+\begin{lstlisting}[language={[ANSI]C++}]
+template <typename Comparable>
+void BSTSorting(std::vector<Comparable> &_arr, int _mode = 0)
 {
-    for (iterator itr = begin(); itr != end(); itr++)
+    if(_mode == 1) //当数组进行乱序
     {
-        std::cout << *itr << " ";
-    }
-    std::cout << '\b' << std::endl;
-}
-\end{lstlisting}
-
-\subsection{find函数}
-
-\begin{lstlisting}
-template <typename DT>
-typename DoubleLinkedList<DT>::iterator find
-        (DoubleLinkedList<DT>& _list, const DT& _val)
-{
-    typename DoubleLinkedList<DT>::iterator itr = _list.begin();
-    typename DoubleLinkedList<DT>::iterator end = _list.end();
-    int position = 1;
-    for(itr; itr != end; ++itr)
-    {
-        if(*itr == _val)
+        random_shuffle(_arr.begin(),_arr.end()); //将数组乱序
+        cout << "开始进行 _mode = 1（乱序）的排序，数组的大小为" << _arr.size() 
+             << "，重复进行10次后取平均值。" << endl;
+        BinarySearchTree<Comparable> bst; //构造一个二叉搜索树bst
+        double average_duration; //创建一个double类的平均时长
+        for(int j=1; j<=10; j++) //为了得到平均时长因此使用for循环
         {
-            std::cout << "The position of value \"" << _val << "\" is " 
-                      << position << "." << std::endl;
-            return itr;
+            clock_t begin_time = clock(); //将起始时间赋值于begin_time
+            for(int i=0; i < _arr.size(); i++) //将_arr中的元素一个一个插入bst
+                bst.insert(_arr[i]); 
+            clock_t end_time = clock(); //将终止时间赋值于end_time
+            average_duration += (double)(end_time - begin_time)/CLOCKS_PER_SEC; 
+            //累加每一次循环所得到的时长
         }
-        position++;
+        average_duration /= 10; //上面进行了10次循环，因此这里除10
+        cout << "排序结束，平均排序时长为" << average_duration << "秒。\v" << endl;
     }
-    std::cout << "The given value \"" << _val 
-              << "\" is not found in the list!" << std::endl;
-    return itr;
-};
+    else //当数组不进行乱序
+    {
+        cout << "开始进行 _mode = 0（不乱序）的排序，数组的大小为" << _arr.size() 
+             << "。" << endl;
+        BinarySearchTree<Comparable> bst; //构造一个二叉搜索树bst
+        clock_t begin_time = clock(); //将起始时间赋值于begin_time
+        for(int i=0; i < _arr.size(); i++) //将_arr中的元素一个一个插入bst
+            bst.insert(_arr[i]);
+        clock_t end_time = clock(); //将终止时间赋值于end_time
+        double duration = (double)(end_time - begin_time)/CLOCKS_PER_SEC;
+        ////创建一个double类的时长，并将终止时间减去起始时间赋值于它
+        cout << "排序结束，排序时长为" << duration << "秒。\v" << endl;
+    }
+}
 \end{lstlisting}
 
 \newpage
 
-\subsection{main函数}
+\subsection{test 函数}
 
-\begin{lstlisting}
-int main(int argc, char* argv[])
+\begin{lstlisting}[language={[ANSI]C++}]
+void mode0_test(int n) //用于测试 _mode = 0 的最坏效率
 {
-    DoubleLinkedList<int> L;
-    L.push_back(1);
-    L.push_back(2);
-    L.push_back(3);
-    L.push_back(4);
-    L.push_back(5);
-    L.printList();
-    DoubleLinkedList<int>::iterator iter;
-    iter = find(L, 3);
-    L.erase(iter);
-    L.printList();
-    iter = find(L, 3);
-    return 0;
+  vector<double> _arr; //构造一个向量_arr
+  
+  for(int i = 1; i <= n; i++) //通过for循环将元素1到n依次插入_arr
+     _arr.push_back(i); //数组中的元素正序时，时间效率最低
+     
+  BSTSorting(_arr, 0); //调用BSTSorting函数来排序_arr
+}
+
+void mode1_test(int n) //用于测试 _mode = 1 的平均效率
+{
+  vector<double> _arr; //构造一个向量_arr
+  
+  for(int i = 1; i <= n; i++) //通过for循环将元素1到n依次插入_arr
+    _arr.push_back(i);
+
+  BSTSorting(_arr, 1);  //调用BSTSorting函数来排序_arr
 }
 \end{lstlisting}
 
+\subsection{main 函数}
+
+\begin{lstlisting}[language={[ANSI]C++}]
+int main()
+{
+  for(int i = 10000; i <= 50000; i+=10000) //调用测试函数，进行五次不同大小的数组排序
+        mode0_test(i);
+        
+  for(int i = 10000; i <= 50000; i+=10000) //调用测试函数，进行五次不同大小的数组排序
+        mode1_test(i);
+
+  return 0;
+}
+\end{lstlisting}
+
+\newpage
+
 \section{测试说明与结果}
 
-将main.cpp与DoubleLinkedList.h两个文件放入项目list后，进入终端，找到list的路径后，输入g++ -o test main.cpp后回车，接着输入./test后回车，将会出现以下结果：
+将main.cpp、BinarySearchTree.h与dsexceptions.h三个文件放入项目bst后，在该目录下进入终端，找到bst的路径后，输入g++ -o test main.cpp后回车，接着输入./test后回车，将会出现以下结果：
 
-\begin{flushleft}
-1 2 3 4 5 \\
-The position of value "3" is 3. \\
-1 2 4 5 \\
-The given value "3" is not found in the list! \\
-\end{flushleft}
+
+开始进行 \_mode = 0（不乱序）的排序，向量的大小为10000。\\
+排序结束，排序时长为0.606883秒。\\
+
+开始进行 \_mode = 0（不乱序）的排序，向量的大小为20000。\\
+排序结束，排序时长为2.21933秒。\\
+
+开始进行 \_mode = 0（不乱序）的排序，向量的大小为30000。\\
+排序结束，排序时长为4.46622秒。\\
+
+开始进行 \_mode = 0（不乱序）的排序，向量的大小为40000。\\
+排序结束，排序时长为8.07494秒。\\
+
+开始进行 \_mode = 0（不乱序）的排序，向量的大小为50000。\\
+排序结束，排序时长为12.6013秒。\\
+
+开始进行 \_mode = 1（乱序）的排序，向量的大小为10000，重复进行10次后取平均值。\\
+排序结束，平均排序时长为0.0019587秒。\\
+
+开始进行 \_mode = 1（乱序）的排序，向量的大小为20000，重复进行10次后取平均值。\\
+排序结束，平均排序时长为0.004505秒。\\
+
+开始进行 \_mode = 1（乱序）的排序，向量的大小为30000，重复进行10次后取平均值。\\
+排序结束，平均排序时长为0.007485秒。\\
+
+开始进行 \_mode = 1（乱序）的排序，向量的大小为40000，重复进行10次后取平均值。\\
+排序结束，平均排序时长为0.0101757秒。\\
+
+开始进行 \_mode = 1（乱序）的排序，向量的大小为50000，重复进行10次后取平均值。\\
+排序结束，平均排序时长为0.0131516秒。\\
+
+不难从上面的测试结果发现，在数组不进行排序的情况下（\_mode = 0），当数组的大小分别为10000、20000、30000、40000及50000时，排序所需的时间大约分别为0.61秒、2.22秒、4.47秒、8.08秒及12.6秒,因此得到 \_mode = 0 的最坏效率为 $O(n^2)$。\\
+
+再来，在数组进行排序的情况下（\_mode = 1），当数组的大小分别为10000、20000、30000、40000及50000时，排序所需的平均时间大约分别为$1.96*10^{-3}$秒、$4.50*10^{-3}$秒、$7.49*10^{-3}$秒、$1.02*10^{-2}$秒及$1.32*10^{-2}$秒，因此得到 \_mode = 1 的平均效率为 $O(nlogn)$。\\
+
+从结果来看，没经过乱序的数组进行二叉排序所需的时间是远大于经过乱序的数组的，因此在日后若有需要用到时，应当选择先进行乱序后再进行二叉排序，方能大幅地提升算法的效率。
 
 \section{内存泄漏检查}
 
 承接上个部分，继续在终端中输入valgrind ./test后回车，将会出现以下结果
 
 \begin{flushleft}
-==2878== \\
-==2878== HEAP SUMMARY: \\
-==2878==     in use at exit: 0 bytes in 0 blocks \\
-==2878==   total heap usage: 9 allocs, 9 frees, 73,896 bytes allocated \\
-==2878== \\
-==2878== All heap blocks were freed -- no leaks are possible \\
-==2878== \\
-==2878== For lists of detected and suppressed errors, rerun with: -s \\
-==2878== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0) \\
+==2479== \\
+==2479== HEAP SUMMARY: \\
+==2479==     in use at exit: 0 bytes in 0 blocks \\
+==2479==   total heap usage: 300,164 allocs, 300,164 frees, 14,089,926 bytes allocated \\
+==2479== \\
+==2479== All heap blocks were freed -- no leaks are possible \\
+==2479== \\
+==2479== Use --track-origin=yes to see where uninitialised values come from\\
+==2479== For lists of detected and suppressed errors, rerun with: -s \\
+==2479== ERROR SUMMARY: 534 errors from 62 contexts (suppressed: 0 from 0) \\
 \end{flushleft}
 
 \end{document}
