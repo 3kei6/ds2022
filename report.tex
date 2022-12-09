@@ -1,0 +1,61 @@
+\documentclass[UTF8]{ctexart}
+
+\usepackage{listings,xcolor}
+\usepackage{graphicx}
+\usepackage[a4paper,left=25.4mm,right=25.4mm,top=29.8mm,bottom=29.8mm]{geometry}
+
+\lstset{numbers=left,
+    commentstyle=\color{blue!50},
+    columns=flexible}
+
+\title{作业：图的模板类设计}
+
+\author{张竣凯 \\ 3210300361 \\ 数学与应用数学}
+
+\begin{document}
+
+\maketitle
+
+图是一种抽象数据类型，用于实现数学中图论的无向图和有向图的概念。图的数据结构包含一个有限（可能是可变的）的集合作为节点集合，以及一个无序对（对应无向图）或有序对（对应有向图）的集合作为边（有向图中也称作弧）的集合。节点可以是图结构的一部分，也可以是用整数下标或引用表示的外部实体。图的数据结构还可能包含和每条边相关联的数值（edge value），例如一个标号或一个数值（即权重，weight；表示花费、容量、长度等）。
+
+\begin{flushright}
+——摘自维基百科《图 (数据结构)》
+\end{flushright}
+
+\section{设计思路}
+
+\subsection{在 Graph.h 头文件中添加 Graph 类}
+
+\subsection{在 Graph 类的私有成员中添加必要的属性}
+
+\hphantom 空1. Vertex结构 —— 节点的结构，该结构中有着两名成员，分别为value和neighbors。value为节点的值，neighbor为指定节点相邻的节点。\newline
+
+\hphantom 空2. Edge结构 —— 边的结构，该结构中有着三名成员，分别为edge\_start、edge\_end、和weight。edge\_start和edge\_end分别为边的起点与终点，weight为边的权重。\newline
+
+\hphantom 空3. graph\_type整型 —— 图的类型，取值范围为1和2，1表示无向无权图/有向无权图, 2表示有向无权图/有向有权图。\newline
+
+\hphantom 空4. v数组和e数组 —— 分别存放指定图的所有节点和所有边。
+
+\subsection{在 Graph 类的共有成员中添加必要的成员函数}
+\hphantom 空1. 构造函数 —— 参数为图的类型graph\_type。\newline
+
+\hphantom 空2. 析构函数 —— 无参数。\newline
+
+\hphantom 空3. addVertex函数 —— 往指定图添加节点，参数为节点的值。\newline
+
+\hphantom 空4. addNeighbors函数 —— 往指定图添加邻居，参数为节点的值、节点的邻居、以及它俩的权重。\newline
+
+\hphantom 空5. listVertexes函数 —— 打印出指定图的所有节点。\newline
+
+\hphantom 空6. listEdges函数 —— 打印出指定图的所有边。\newline
+
+\hphantom 空7. listAdjList函数 —— 打印出指定图的邻接表。
+
+\subsection{尽可能地使用引用\&以及充分考虑必要的const限制}
+\hphantom 空以便于减少内部复制和提高安全性
+
+\section{测试说明}
+
+成功
+
+\end{document}
