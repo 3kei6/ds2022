@@ -8,9 +8,8 @@ using namespace std;
 
 int main()
 {
-
     cout << "测试无向无权图/有向无权图：" << endl;
-    //有向无权图
+
     Graph g1(1); 
     
     g1.addVertex("A");
@@ -27,6 +26,9 @@ int main()
     g1.listEdges();
     
     g1.listAdjList();
+    
+    cout << "测试结束" << endl;
+    cout << endl;
     
     cout << "测试无向有权图/有向有权图：" << endl;
     //有向有权图
@@ -46,4 +48,6 @@ int main()
     g2.listEdges();
     
     g2.listAdjList();
+    
+    cout << "测试结束" << endl;
 }
