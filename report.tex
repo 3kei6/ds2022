@@ -56,6 +56,50 @@
 
 \section{测试说明}
 
-成功
+1. 在 main.cpp 中声明两个Graph类的变量g1和g2。其中g1为无权图，g2为有权图。\newline
+
+2. 为图g1添加A、B、C和D四个节点。 \newline
+
+3. 为图g1添加AB、AC、BD和DA四条边。\newline
+
+4. 为图g2添加A、B、C和D四个节点。 \newline
+
+5. 为图g2添加AB、AC、BD和DA四条边。\newline
+
+6. 为图g2添加四条边的权重，分别为AB=3、AC=5、BD=4、DA=6。\newline
+
+7. 最后也不忘使用打印出节点、边、邻接表的函数。\newline
+
+8. 运行测试程序，在终端中出现了以下结果：\newline
+
+\begin{flushleft}
+测试无向无权图/有向无权图：\newline
+列出全部节点: A, B, C, D.\newline
+
+列出全部边: (A, B, 1), (A, C, 1), (B, D, 1), (D, A, 1).\newline
+
+列出邻接表:\newline
+A -> B, C, \newline
+B -> D, \newline
+C -> \newline
+D -> A. \newline
+
+测试结束\newline
+
+测试无向有向图/有向有权图：\newline
+列出全部节点: A, B, C, D.\newline
+
+列出全部边: (A, B, 3), (A, C, 5), (B, D, 4), (D, A, 6).\newline
+
+列出邻接表:\newline
+A -> B(3), C(5), \newline
+B -> D(4), \newline
+C -> \newline
+D -> A(6). \newline
+
+测试结束\newline
+\end{flushleft}
+
+所有结果正确打印无误。
 
 \end{document}
