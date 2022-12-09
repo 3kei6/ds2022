@@ -34,31 +34,32 @@ class Graph //图的类
         {
             Vertex* newVertex = new Vertex; //新创建一个指向Vertex结构的指针，命名为newVertex
             newVertex->value = val; //将参数val赋值于newVertex的值
-            v.push_back(newVertex); //将newVertex传入v（v为存放指定图的所有节点）
+            v.push_back(newVertex); //将newVertex插入v（v为存放指定图的所有节点）
         }
         
-        void addNeighbors(const string value, const string neighbors, const int w = 1) //往指定图添加邻居，参数为节点的值、节点的邻居、以及它俩的权重
-        
-            for( int i=0; i<v.size(); i++)
+        void addNeighbors(const string val, const string neighbors, const int w = 1) //往指定图添加邻居，参数为节点的值、节点的邻居、以及它俩的权重
+        {
+            //通过for循环遍历v中的节点，当遍历得到的节点等于传入的value时，往该节点插入传入的邻居
+            for( int i=0; i<v.size(); i++) 
             {
-                if(v[i]->value == value)
+                if(v[i]->value == val)
                 {
                     v[i]->neighbors.push_back(neighbors);
                 }
             }
             
-            Edge* newEdge = new Edge;
-            newEdge->edge_start = value; //newEdge(边)的开始为start
-            newEdge->edge_end = neighbors;
-            newEdge->weight = w;
-            e.push_back(newEdge); //把newEdge放入名为edge的向量里
+            Edge* newEdge = new Edge; //新创建一个指向Edge结构的指针，命名为newEdge
+            newEdge->edge_start = val; //将参数val赋值于newEdge的起点
+            newEdge->edge_end = neighbors; //将参数val赋值于newEdge的终点
+            newEdge->weight = w; //将参数val赋值于newEdge的权重
+            e.push_back(newEdge); //将newEdge插入e（e为存放指定图的所有边
             
         }
         
         void listVertexes() //打印出指定图的所有节点
         {
             cout << "列出全部节点: ";
-            for( int i=0; i<v.size(); i++)
+            for( int i=0; i<v.size(); i++ )
             {
                 if ( i == v.size()-1 )
                 {
@@ -96,7 +97,7 @@ class Graph //图的类
         
         void listAdjList() //打印出指定图的邻接表
         {
-            if( graph_type == 1 )
+            if( graph_type == 1 ) //通过if判断图是否有权
             {
                 cout << "列出邻接表:" << endl;
                 for( int i=0; i < v.size(); i++)
