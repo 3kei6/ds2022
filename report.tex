@@ -1,0 +1,115 @@
+\documentclass[UTF8]{ctexart}
+
+\usepackage{listings,xcolor}
+\usepackage{graphicx}
+\usepackage[a4paper,left=25.4mm,right=25.4mm,top=29.8mm,bottom=29.8mm]{geometry}
+
+\lstset{numbers=left,
+    commentstyle=\color{blue!50},
+    columns=flexible}
+
+\title{项目作业：五则运算计算器的实现}
+
+\author{张竣凯 \\ 3210300361 \\ 数学与应用数学}
+
+\begin{document}
+
+\maketitle
+
+A binary expression tree is a specific kind of a binary tree used to represent expressions. Two common types of expressions that a binary expression tree can represent are algebraic and boolean. These trees can represent expressions that contain both unary and binary operators.
+
+\begin{flushright}
+——摘自维基百科《Binary expression tree》
+\end{flushright}
+
+\section{设计思路}
+
+\subsection{在 calculator.h 头文件中添加外置函数}
+
+\hphantom 空1. dTOs(sTOd)函数 —— 将double转换成string（将string转换成double）\newline
+
+\hphantom 空2. type函数 —— 为参数赋予指定类型，以方便处理后续任务\newline
+
+\hphantom 空3. is\_valid函数 —— 判断式子是否符合规范
+
+\subsection{在 calculator.h 头文件中添加 ExpressionTree 类}
+
+\subsection{在 ExpressionTree 类的共有成员中添加必要的成员函数}
+\hphantom 空1. 构造函数\newline
+
+\hphantom 空2. 析构函数\newline
+
+\hphantom 空3. insert函数 —— 自顶往下插入节点\newline
+
+\hphantom 空4. clear函数 —— 清空ExpressionTree中的所有节点\newline
+
+\hphantom 空5. calculate函数 —— 计算函数
+
+\subsection{在 ExpressionTree 类的私有成员中添加必要的属性}
+
+\hphantom 空1. ExpressionNode结构 —— 节点的结构，该结构中有着三名成员，分别为element和*left(*right)，其中element表示节点的元素，*left(*right)表示指向左（右）子树的指针\newline
+
+\hphantom 空2. priority函数 —— 判断运算符的优先级\newline
+
+\hphantom 空3. insert函数 —— 自顶往下插入节点\newline
+
+\hphantom 空4. clear函数 —— 清空ExpressionTree中的所有节点\newline
+
+\hphantom 空5. calculate函数 —— 计算函数\newline
+
+\hphantom 空6. result函数 —— 自底往上计算每个节点的值
+
+\subsection{尽可能地使用引用\&以及充分考虑必要的const限制}
+\hphantom 空以便于减少内部复制和提高安全性
+
+\section{测试说明}
+
+1. 在 main.cpp 中声明两个string类的变量eps和inp。\newline
+
+2. 其中inp用于储存欲测试的式子。 \newline
+
+3. 通过for循环来规范输入，并把合格的式子储存在eps中。\newline
+
+4. 通过calculate函数来计算式子eps的值。\newline
+
+5. 运行测试程序，\newline
+
+当输入为 “2\^(1 + 3) - 5 *  (15:23)/(1 + 2) * 3 - 5” 时，终端出现以下结果：\newline
+
+2\^(1 + 3) - 5 *  (15:23)/(1 + 2) * 3 - 5 = -65.15\newline
+
+当输入为 “1.25 + (3 * (1 + 2\^2) * 3 - 43)\^(4 - 2)” 时，终端出现以下结果：\newline
+
+1.25 + (3 * (1 + 2\^2) * 3 - 43)\^(4 - 2) = 5.25\newline
+
+当输入为 “2\^(1 + 3)) - 5 *  (15:23)/(1 + 2) * 3 - 5” 时，终端出现以下结果：\newline
+
+错误：括号不匹配\newline
+
+当输入为 “2\^(1 + 3)) - 5 *  (15:23)/(1 - 1) * 3 - 5” 时，终端出现以下结果：\newline
+
+错误：除数为0\newline
+
+当输入为 “(1+2” 时， 终端出现以下结果：\newline
+
+错误：无效的括号数量\newline
+
+当输入为 “A+2” 时， 终端出现以下结果：\newline
+
+错误：存在无效字符\newline
+
+当输入为 “()1+2” 时， 终端出现以下结果：\newline
+
+错误：无效的括号内容\newline
+
+当输入为 “.1+2” 时， 终端出现以下结果：\newline
+
+错误：无效的小数点位置\newline
+
+当输入为 “12+” 时， 终端出现以下结果：\newline
+
+错误：无效的运算符位置\newline
+
+所有要求的参考算例都准确计算无误，在已完成参考算例的基础上，我选择补充我认为有必要的其他程序测试内容，且测试结果都正确无误。
+
+\end{document}
